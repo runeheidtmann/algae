@@ -32,19 +32,21 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         )
         return user
 
+class DocumentFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DocumentFile
+        fields = ['id', 'file','document']
+
 class DocumentSerializer(serializers.ModelSerializer):
+    document_files = DocumentFileSerializer(many=True, read_only=True, source='documentfile_set')
+
     class Meta:
         model = Document
-        fields = ['id', 'title'] 
+        fields = ['id', 'title','document_files'] 
 
     def create(self, validated_data):
         # Get the user from the context (passed in the view)
         user = self.context.get('request').user
         # Create a new Document instance with the user
-        document = Document.objects.create(user_id=user, **validated_data)
+        document = Document.objects.create(user_id=user.id, **validated_data)
         return document
-
-class DocumentFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DocumentFile
-        fields = ['id', 'file','document']

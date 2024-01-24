@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Document(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     def __str__(self):
         return self.title

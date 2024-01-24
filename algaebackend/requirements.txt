@@ -3,3 +3,8 @@ djangorestframework
 djangorestframework-simplejwt
 django-cors-headers
 requests
+langchain
+pypdf
+python-dotenv
+tiktoken
+sqlite-vss
