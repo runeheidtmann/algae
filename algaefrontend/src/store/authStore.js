@@ -4,11 +4,21 @@ export const useAuthStore = defineStore('auth', {
     state: () => ({
         accessToken: localStorage.getItem('accessToken') || null,
         refreshToken: localStorage.getItem('refreshToken') || null,
-        userData: null,
+        userData: { username: '', }
     }),
     getters: {
         isLoggedIn: (state) => !!state.accessToken,
+        isTokenExpired: (state) => {
+            if (!state.accessToken) return true;
+            const payload = parseJwt(state.accessToken);
+            if (!payload) return true;
+
+            const currentTime = Math.floor(Date.now() / 1000);
+            console.log(payload.exp)
+            return payload.exp < currentTime;
+        }
     },
+    
     actions: {
         async login(username, password) {
             try {
@@ -30,7 +40,7 @@ export const useAuthStore = defineStore('auth', {
 
                 localStorage.setItem('accessToken', this.accessToken);
                 localStorage.setItem('refreshToken', this.refreshToken);
-                
+
                 await this.fetchUserData();
 
             } catch (error) {
@@ -40,7 +50,7 @@ export const useAuthStore = defineStore('auth', {
         },
         async signup(username, first_name, last_name, email, password) {
             try {
-                const response = await fetch('http://127.0.0.1:8000/api/register/', { 
+                const response = await fetch('http://127.0.0.1:8000/api/register/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -71,27 +81,33 @@ export const useAuthStore = defineStore('auth', {
             }
         },
         async fetchUserData() {
-            try {
-                const response = await fetch('http://127.0.0.1:8000/api/userdata/', {
-                    headers: {
-                        'Authorization': `Bearer ${this.accessToken}`
+            if(!this.isTokenExpired){
+                try {
+                    const response = await fetch('http://127.0.0.1:8000/api/userdata/', {
+                        headers: {
+                            'Authorization': `Bearer ${this.accessToken}`
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user data');
                     }
-                });
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user data');
+                    this.userData = await response.json();
+                    console.log(this.userData);
+    
+    
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
                 }
-                this.userData = await response.json();
-                console.log(this.userData);
-
-                
-            } catch (error) {
-                console.error('Error fetching user data:', error);
             }
+            else{
+                this.refreshAccessToken()
+            }
+            
         },
 
         async refreshAccessToken() {
             try {
-                const response = await fetch('http://your-django-api-url/api/token/refresh/', {
+                const response = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -107,6 +123,9 @@ export const useAuthStore = defineStore('auth', {
 
                 this.accessToken = data.access;
                 localStorage.setItem('accessToken', this.accessToken);
+                console.log("refreshed token")
+                await this.fetchUserData();
+                console.log("Got userdata")
             } catch (error) {
                 console.error('Error during token refresh:', error);
                 throw error;
@@ -121,3 +140,17 @@ export const useAuthStore = defineStore('auth', {
         },
     },
 });
+
+function parseJwt(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    } catch (error) {
+        return null;
+    }
+}

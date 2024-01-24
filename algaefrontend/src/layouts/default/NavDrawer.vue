@@ -11,7 +11,7 @@
         lines="two"
         prepend-icon="mdi-account-outline"
         subtitle="Logged in"
-      >{{ userData.username }}</v-list-item>
+      >  {{ userData?.username }}</v-list-item>
     </template>
 
     <v-divider class="border-0"></v-divider>
@@ -46,8 +46,6 @@ import { useAuthStore } from "@/store/authStore";
 
 export default {
   data: () => ({
-    overlayLogin: false,
-    overlaySignin: false,
     username: '',
     first_name: null,
     last_name: null,
@@ -78,8 +76,12 @@ export default {
   computed: {
     userData() {
       const authStore = useAuthStore();
-      return authStore.userData;
-    },
+      return authStore.userData
+    }
+  },
+  mounted() {
+    const authStore = useAuthStore();
+    authStore.fetchUserData();
   },
 };
 </script>

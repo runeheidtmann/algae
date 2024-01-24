@@ -1,7 +1,7 @@
 <template>
-  <HelloWorld />
+  <ChatComponent />
 </template>
 
 <script setup>
-  import HelloWorld from '@/components/HelloWorld.vue'
+  import ChatComponent from '@/components/ChatComponent.vue'
 </script>

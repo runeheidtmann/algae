@@ -1,13 +1,67 @@
 // Utilities
 import { defineStore } from 'pinia'
-import { useAuthStore } from './authStore'; 
+import { useAuthStore } from './authStore';
 
 export const useAppStore = defineStore('appStore', {
     state: () => ({
-        
+        documents: [],
+        conversation: {},
     }),
     actions: {
-        // since we rely on `this`, we cannot use an arrow function
+        async sendChatQuery(question) {
+            try {
+                const aStore = useAuthStore()
+                const formData = new FormData();
+                formData.append('question', question);
+                console.log(question)
+
+                const response = await fetch('http://127.0.0.1:8000/api/chat/', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${aStore.accessToken}`,
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
+                const data = await response.json();
+                console.log(data)
+                this.conversation = data
+
+            } catch (error) {
+                console.error('Error chatting:', error);
+                throw error;
+            }
+
+        },
+        async fetchUserDocuments() {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/documents/', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Include the authorization header with your token
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error fetching documents');
+                }
+
+                const data = await response.json();
+
+                const documents = processDocuments(data)
+
+                this.documents = documents; // Store the documents in the state
+
+            } catch (error) {
+                console.error('Failed to fetch documents:', error);
+                // Handle the error appropriately
+            }
+        },
         async uploadDocument(title, file) {
             try {
                 const aStore = useAuthStore()
@@ -22,16 +76,15 @@ export const useAppStore = defineStore('appStore', {
                     },
                     body: formData
                 });
-                for (var pair of formData.entries()) {
-                    console.log(pair[0]+ ', ' + pair[1]); 
-                }
 
                 if (!response.ok) {
                     throw new Error(`Error: ${response.statusText}`);
                 }
 
-                const responseData = await response.json();
-                return responseData;
+                this.fetchUserDocuments()
+                console.log("uploaded succesfully")
+
+
             } catch (error) {
                 console.error('Error uploading document:', error);
                 throw error;
@@ -39,3 +92,14 @@ export const useAppStore = defineStore('appStore', {
         }
     },
 })
+
+function processDocuments(inputData) {
+    return inputData.map(data => {
+        return {
+            title: data.title,
+            file: data.document_files.length > 0
+                ? `<a href="${data.document_files[0].file}">${data.title}</a>`
+                : 'No file available'
+        };
+    });
+}
