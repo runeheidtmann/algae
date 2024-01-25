@@ -18,8 +18,15 @@ export const useAuthStore = defineStore('auth', {
             return payload.exp < currentTime;
         }
     },
-    
+
     actions: {
+        tokenCheck() {
+            if (this.isTokenExpired) {
+                this.refreshAccessToken()
+                console.log("checked")
+            }
+
+        },
         async login(username, password) {
             try {
                 const response = await fetch('http://127.0.0.1:8000/api/token/', {
@@ -81,30 +88,26 @@ export const useAuthStore = defineStore('auth', {
             }
         },
         async fetchUserData() {
-            if(!this.isTokenExpired){
-                try {
-                    const response = await fetch('http://127.0.0.1:8000/api/userdata/', {
-                        headers: {
-                            'Authorization': `Bearer ${this.accessToken}`
-                        }
-                    });
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch user data');
-                    }
-                    this.userData = await response.json();
-                    console.log(this.userData);
-    
-    
-                } catch (error) {
-                    console.error('Error fetching user data:', error);
-                }
-            }
-            else{
-                this.refreshAccessToken()
-            }
-            
-        },
+            this.tokenCheck()
 
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/userdata/', {
+                    headers: {
+                        'Authorization': `Bearer ${this.accessToken}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+                this.userData = await response.json();
+                console.log(this.userData);
+
+
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+
+        },
         async refreshAccessToken() {
             try {
                 const response = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
@@ -145,7 +148,7 @@ function parseJwt(token) {
     try {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
 

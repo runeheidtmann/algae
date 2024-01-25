@@ -1,56 +1,62 @@
 <template>
   <v-container class="d-flex flex-column fill-height justify-between w-50">
-    <div class="d-flex w-100 mb-5 text-body-1">
-      <div class="mr-5">RU</div>
-      <div>
-        <div class="font-weight-medium">You</div>
+    <div v-if="conversation.question">
+      <div class="d-flex w-100 mb-5 text-body-1">
+        <div class="mr-5">RU</div>
         <div>
-          {{ conversation.question }}
+          <div class="font-weight-medium">You</div>
+          <div>
+            {{ conversation.question }}
+          </div>
         </div>
       </div>
-    </div>
-    <div class="d-flex w-100 mb-5 text-body-1">
-      <div class="mr-5">AB</div>
-      <div>
-        <div class="font-weight-medium">AlgaeBrain</div>
+      <div v-if="conversation.answer" class="d-flex w-100 mb-5 text-body-1">
+        <div class="mr-5">AB</div>
         <div>
-          {{ conversation.answer }}
-          <v-dialog width="800">
-            <template v-slot:activator="{ props }">
-              <a v-bind="props" text="[>_source]" class="text-indigo-darken-4">
-              </a>
-            </template>
+          <div class="font-weight-medium">AlgaeBrain</div>
+          <div>
+            {{ conversation.answer }}
+            <br />
+            <v-dialog width="800">
+              <template v-slot:activator="{ props }">
+                <a
+                  v-bind="props"
+                  text="[>_source]"
+                  class="text-indigo-darken-4"
+                >
+                </a>
+              </template>
 
-            <template v-slot:default="{ isActive }">
-              <v-card :title="conversation.docs[0][1][1].source">
-                <v-card-text> {{conversation.docs[2][0][1]}} </v-card-text>
-                <v-card-text>
-                  <a href="#">{{conversation.docs[2][1][1].source}}: page {{conversation.docs[0][1][1].page}}</a>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
+              <template v-slot:default="{ isActive }">
+                <v-card :title="conversation.docs[0][1][1].source">
+                  <v-card-text> {{ conversation.docs[2][0][1] }} </v-card-text>
+                  <v-card-text>
+                    <a href="#"
+                      >{{ conversation.docs[2][1][1].source }}: page
+                      {{ conversation.docs[0][1][1].page }}</a
+                    >
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
 
-                  <v-btn
-                    text="Close Dialog"
-                    @click="isActive.value = false"
-                  ></v-btn>
-                </v-card-actions>
-              </v-card>
-            </template>
-          </v-dialog>
+                    <v-btn
+                      text="Close Dialog"
+                      @click="isActive.value = false"
+                    ></v-btn>
+                  </v-card-actions>
+                </v-card>
+              </template>
+            </v-dialog>
+          </div>
+
+        <RatingComponent />
         </div>
-
-        <div class="d-flex flex-column mt-3">
-          <div>Rate this answer:</div>
-          <v-rating
-            hover
-            v-model="rating"
-            class="m-0 p-0"
-            size="small"
-            color="orange-lighten-1"
-            :readonly="readonly"
-          ></v-rating>
-        </div>
+      </div>
+      <div v-else>
+        <v-progress-linear
+          indeterminate
+          color="yellow-darken-2"
+        ></v-progress-linear>
       </div>
     </div>
 
@@ -73,7 +79,10 @@
 
 <script>
 import { useAppStore } from "@/store/app";
+import RatingComponent from '@/components/RatingComponent.vue';
+
 export default {
+  components: { RatingComponent },
   data() {
     return {
       loading: false,
@@ -83,12 +92,15 @@ export default {
   },
   methods: {
     async sendQuery() {
-      const appStore = useAppStore();
+      const chatInputText = this.chatInput
+      this.loading = true;
+      this.chatInput = ""
       try {
-        await appStore.sendChatQuery(this.chatInput);
+        await this.appStore.sendChatQuery(chatInputText);
       } catch (error) {
         this.errorMessage = "Some error in with the send question-thingy";
       }
+      this.loading = false;
     },
   },
   created() {
@@ -96,11 +108,10 @@ export default {
   },
   computed: {
     conversation() {
-     
       if (this.appStore) {
         return this.appStore.conversation;
       }
-      return {}; 
+      return {};
     },
   },
 };

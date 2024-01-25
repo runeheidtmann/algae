@@ -8,7 +8,14 @@ export const useAppStore = defineStore('appStore', {
         conversation: {},
     }),
     actions: {
+        checkToken(){
+            const authStore = useAuthStore()
+            authStore.tokenCheck()
+        },
         async sendChatQuery(question) {
+            this.checkToken()
+            this.conversation = {"question": question, "answer": ""}
+
             try {
                 const aStore = useAuthStore()
                 const formData = new FormData();
@@ -37,6 +44,7 @@ export const useAppStore = defineStore('appStore', {
 
         },
         async fetchUserDocuments() {
+            this.checkToken()
             try {
                 const response = await fetch('http://127.0.0.1:8000/api/documents/', {
                     method: 'GET',
@@ -63,6 +71,7 @@ export const useAppStore = defineStore('appStore', {
             }
         },
         async uploadDocument(title, file) {
+            this.checkToken()
             try {
                 const aStore = useAuthStore()
                 const formData = new FormData();
@@ -90,6 +99,9 @@ export const useAppStore = defineStore('appStore', {
                 throw error;
             }
         }
+    },
+    upDateConversation(question){
+        this.conversation = {"question": question, "answer": ""}
     },
 })
 

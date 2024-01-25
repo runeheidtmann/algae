@@ -1,22 +1,14 @@
 <template>
   <v-app>
-    <v-main>
+    <v-main  class="bg-grey-darken-3">
       <section id="hero">
-        <v-sheet class="d-flex align-center pb-16" color="grey-darken-3">
-          <v-container class="text-center">
-            <v-responsive class="mx-auto" width="500" height="600">
-              <h3 class="text-h3">Try the new Vuetify</h3>
+        <v-sheet class="d-flex align-center mx-auto pb-16" color="grey-darken-3">
+          <v-container class="text-center p-48">
+            <v-responsive class="mx-auto align-center" width="800" height="400">
+              <h2 class="text-h2 mt-48">Try chatting with your research</h2>
 
-              <p class="mt-4 text-medium-emphasis">
-                This is a basic Vuetify 3 application designed to help get your
-                feet wet with the next version of the framework. Visit our
-                <a
-                  href="https://vuetifyjs.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >documentation</a
-                >
-                for more information.
+              <p class="mt-4 text-h6 text-white" >
+                AlgaeBrain is a domain specific chatbot. It was created for Algae researchers to be able to find relevant answers to their everyday questions much quicker.
               </p>
             </v-responsive>
           </v-container>
@@ -29,25 +21,23 @@
             <v-row justify="space-between">
               <v-col cols="auto">
                 <v-responsive width="350">
-                  <h2 class="text-h4">New customization system</h2>
+                  <h2 class="text-h4">Retriever Augmented Generation</h2>
 
-                  <p class="text-success mt-3">Global Defaults</p>
-
-                  <strong class="mt-3"> Version 3 Only </strong>
+                  <p class="text-success mt-3">Large language models + semantic search</p>
 
                   <p class="mt-8">
-                    Vuetify 3 has an unprecedented level of customization
-                    options that make implementing any design system easy.
+                    This system utilizes the power of two great technologies. Large language models and semantic search in databases.
+
                   </p>
 
                   <p class="mt-8">
-                    Assign default values for all components in the library,
-                    including nested support.
+                    Upload all of your domain specific research papers, articles, books etc. The system will save it in a vector database, that enables you to augment your chat experience with relevant sources.
+                    This gives much better research answers than with a generic LLM.
                   </p>
 
                   <v-btn
                     class="mt-6"
-                    href="https://vuetifyjs.com/features/global-configuration/"
+                    href="https://python.langchain.com/docs/use_cases/chatbots"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -64,143 +54,11 @@
           </v-container>
         </section>
 
-        <v-container>
-          <v-divider class="my-12" />
-        </v-container>
 
-        <section id="controls">
-          <v-container>
-            <v-row justify="space-between">
-              <v-col cols="auto">
-                <v-responsive width="350">
-                  <h2 class="text-h4">Rebuilt from the ground up</h2>
-
-                  <p class="text-success mt-3">Composition API</p>
-
-                  <p class="mt-3">
-                    Vuetify 3 uses the Vue composition API to build easy-to-use
-                    and feature rich components that work out of the box.
-                  </p>
-
-                  <p class="mt-8">
-                    <strong>How to use:</strong>
-
-                    Services are now accessed through
-                    <strong>use functions</strong> that follow the Vue 3
-                    nomenclature and code styling.
-                  </p>
-
-                  <v-btn
-                    class="mt-6"
-                    href="https://vuetifyjs.com/introduction/why-vuetify/"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    More Information
-                  </v-btn>
-                </v-responsive>
-              </v-col>
-
-              <v-img
-                max-width="400"
-                src="https://cdn.vuetifyjs.com/store/themes/vite-free/slider.png"
-              />
-            </v-row>
-          </v-container>
-        </section>
-
-        <v-container>
-          <v-divider class="my-12" />
-        </v-container>
-
-        <section id="grid">
-          <v-container>
-            <v-row justify="space-between">
-              <v-col cols="auto">
-                <v-responsive width="350">
-                  <h2 class="text-h4">The most complete version yet</h2>
-
-                  <p class="text-success mt-3">Available now!</p>
-
-                  <p class="mt-3">
-                    The latest version is here. Use one of our free themes to
-                    get a head start!
-                  </p>
-
-                  <p class="mt-8">
-                    This theme is designed to demonstrate a basic single page
-                    application using Vuetify 3.
-                  </p>
-
-                  <v-btn class="mt-6"> More Information </v-btn>
-                </v-responsive>
-              </v-col>
-
-              <v-img
-                max-width="400"
-                src="https://cdn.vuetifyjs.com/store/themes/vite-free/layout.png"
-              />
-            </v-row>
-          </v-container>
-        </section>
-      </v-sheet>
-
-      <v-sheet class="py-16" color="#181818">
-        <section id="grid">
-          <v-container>
-            <v-row justify="space-between">
-              <v-col cols="auto">
-                <v-responsive class="overflow-visible" width="350">
-                  <h2 class="text-h4">Shape the future of Vuetify</h2>
-
-                  <p class="text-success mt-3">Support Development</p>
-
-                  <strong>Become a sponsor</strong>
-
-                  <p class="mt-8">
-                    Vuetify is free to use software under the
-                    <a
-                      href="https://opensource.org/licenses/MIT"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >MIT</a
-                    >
-                    License and requires an extensive amount of time to
-                    maintain. Supporting development ensures Vuetify will be
-                    actively maintained.
-                  </p>
-
-                  <v-btn-alt
-                    class="mt-6"
-                    href="https://github.com/sponsors/johnleider"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    text="Support now"
-                    prepend-icon="$vuetify"
-                  />
-                </v-responsive>
-              </v-col>
-              <v-img
-                max-width="400"
-                src="https://cdn.vuetifyjs.com/store/themes/vite-free/vuetify.png"
-              />
-            </v-row>
-          </v-container>
-        </section>
       </v-sheet>
     </v-main>
 
-    <v-footer>
-      <v-container
-        class="text-overline d-flex align-center justify-space-between"
-      >
-        <div>
-          Copyright &copy; 2016-{{ new Date().getFullYear() }} Vuetify, LLC
-        </div>
-
-        <v-icon icon="$vuetify" size="x-large" />
-      </v-container>
-    </v-footer>
+  
   </v-app>
 </template>
 
@@ -266,10 +124,6 @@ export default {
 };
 </script>
 <style scoped>
-.finedTitle {
-  font-weight: 900;
-  text-shadow: 2px 2px #000000;
-}
 
 .social-icon {
   font-size: 21px;
