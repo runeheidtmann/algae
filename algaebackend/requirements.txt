@@ -4,7 +4,11 @@ djangorestframework-simplejwt
 django-cors-headers
 requests
 langchain
+langchain_openai
+openai
+pinecone-client==2.2.4
+pinecone-datasets
 pypdf
 python-dotenv
 tiktoken
-sqlite-vss
+python-dotenv
