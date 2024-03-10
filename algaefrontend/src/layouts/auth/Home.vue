@@ -1,14 +1,25 @@
 <template>
   <v-app>
-    <v-main  class="bg-grey-darken-3">
+    <v-main class="bg-grey-darken-3">
       <section id="hero">
-        <v-sheet class="d-flex align-center mx-auto pb-16" color="grey-darken-3">
+        <v-sheet
+          class="d-flex align-center mx-auto pb-16"
+          color="grey-darken-3"
+        >
           <v-container class="text-center p-48">
-            <v-responsive class="mx-auto align-center" width="800" height="400">
-              <h2 class="text-h2 mt-48">Try chatting with your research</h2>
+            <v-responsive class="mx-auto align-center" width="800" height="700">
+              <v-img
+                :width="800"
+                cover
+                src="/algae2.jpg"
+                class="mb-5"
+              ></v-img>
+              <h2 class="text-h2">Try chatting with your research</h2>
 
-              <p class="mt-4 text-h6 text-white" >
-                AlgaeBrain is a domain specific chatbot. It was created for Algae researchers to be able to find relevant answers to their everyday questions much quicker.
+              <p class="mt-3 text-h6 text-white">
+                AlgaeBrain is a domain specific chatbot. It was created for
+                Algae researchers to be able to find relevant answers to their
+                everyday questions much quicker.
               </p>
             </v-responsive>
           </v-container>
@@ -23,16 +34,21 @@
                 <v-responsive width="350">
                   <h2 class="text-h4">Retriever Augmented Generation</h2>
 
-                  <p class="text-success mt-3">Large language models + semantic search</p>
-
-                  <p class="mt-8">
-                    This system utilizes the power of two great technologies. Large language models and semantic search in databases.
-
+                  <p class="text-success mt-3">
+                    Large language models + semantic search
                   </p>
 
                   <p class="mt-8">
-                    Upload all of your domain specific research papers, articles, books etc. The system will save it in a vector database, that enables you to augment your chat experience with relevant sources.
-                    This gives much better research answers than with a generic LLM.
+                    This system utilizes the power of two great technologies.
+                    Large language models and semantic search in databases.
+                  </p>
+
+                  <p class="mt-8">
+                    Upload all of your domain specific research papers,
+                    articles, books etc. The system will save it in a vector
+                    database, that enables you to augment your chat experience
+                    with relevant sources. This gives much better research
+                    answers than with a generic LLM.
                   </p>
 
                   <v-btn
@@ -53,12 +69,8 @@
             </v-row>
           </v-container>
         </section>
-
-
       </v-sheet>
     </v-main>
-
-  
   </v-app>
 </template>
 
@@ -124,7 +136,6 @@ export default {
 };
 </script>
 <style scoped>
-
 .social-icon {
   font-size: 21px;
   color: white;

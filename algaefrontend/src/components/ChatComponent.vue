@@ -49,7 +49,7 @@
             </v-dialog>
           </div>
 
-        <RatingComponent />
+          <RatingComponent />
         </div>
       </div>
       <div v-else>
@@ -79,7 +79,7 @@
 
 <script>
 import { useAppStore } from "@/store/app";
-import RatingComponent from '@/components/RatingComponent.vue';
+import RatingComponent from "@/components/RatingComponent.vue";
 
 export default {
   components: { RatingComponent },
@@ -92,9 +92,9 @@ export default {
   },
   methods: {
     async sendQuery() {
-      const chatInputText = this.chatInput
+      const chatInputText = this.chatInput;
       this.loading = true;
-      this.chatInput = ""
+      this.chatInput = "";
       try {
         await this.appStore.sendChatQuery(chatInputText);
       } catch (error) {
@@ -102,6 +102,14 @@ export default {
       }
       this.loading = false;
     },
+    resetState() {
+      this.appStore.resetConversation(); // Assuming this method resets your state
+    },
+  },
+
+  beforeRouteLeave(to, from, next) {
+    this.resetState(); // Call the reset state method
+    next(); // Proceed with the route navigation
   },
   created() {
     this.appStore = useAppStore();
