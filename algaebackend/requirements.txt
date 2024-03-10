@@ -12,3 +12,4 @@ pypdf
 python-dotenv
 tiktoken
 python-dotenv
+chromadb

@@ -7,16 +7,13 @@ from ..serializers import EvaluationSerializer
 from rest_framework import status
 
 class EvaluationView(APIView):
-    # Return a list of all model objects
-    def get(self, request):
+    def get(self, request, format=None):
         evaluations = Evaluation.objects.all()
         serializer = EvaluationSerializer(evaluations, many=True)
-        return Response({"evaluations": serializer.data})
-    
-    # Store a new model object
-    def post(self, request):
-        serializer = EvaluationSerializer(data=request.data)
-        print(request.data)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = EvaluationSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

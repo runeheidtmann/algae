@@ -8,7 +8,13 @@ class EvaluationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evaluation
         fields = '__all__'
-        
+        extra_kwargs = {'user': {'read_only': True}}
+
+    def create(self, validated_data):
+        # Get the user from the request
+        user = self.context['request'].user
+        # Create a new Evaluation instance with the user
+        return Evaluation.objects.create(user=user, **validated_data)    
 class LLMSerializer(serializers.ModelSerializer):
     class Meta:
         model = LLM

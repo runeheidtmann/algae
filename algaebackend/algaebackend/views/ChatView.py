@@ -51,8 +51,7 @@ class ChatAPIView(APIView):
         llm = ChatOpenAI(temperature=0, openai_api_key=OPENAI_API_KEY)
         chain = load_qa_chain(llm, chain_type="stuff")
         query = request.data.get('question')
-        print("QUEUUEUUEUEUUEUUEUUUEUERY 12312 3123 123 123 123 ")
-        print(query)
+      
         docs = vectorstore.similarity_search(query, k=3)
         answer = chain.run(input_documents=docs, question=query)
         data = {
