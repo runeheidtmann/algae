@@ -1,3 +1,4 @@
+pyarrow
 django
 djangorestframework
 djangorestframework-simplejwt
